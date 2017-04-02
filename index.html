@@ -1,0 +1,88 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foundation for Sites</title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      
+      
+      google.charts.setOnLoadCallback(fetchDataAndDrawChart);
+      
+      function fetchDataAndDrawChart() {
+		$.getJSON( "data/instrumentData/pressureGauge/pressureGaugeData.json", function( data ) {
+		  $.each( data, function( key, val ) {
+		  		if (key == 'timeBasedData')
+		  		{
+			  		drawChart(val);
+		  		}
+		  });
+		 }).fail(function() {
+		 	$('#timeChartFailMessage').show();
+		 });
+      }
+
+      function drawChart( arrayOfData) {
+        var data = google.visualization.arrayToDataTable(arrayOfData);
+
+        var options = {
+          title: 'Pressure vs. Time',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('pressure_time_chart'));
+
+        chart.draw(data, options);
+        
+      }
+    </script>
+  </head>
+  <body>
+    <div class="row">
+      <div class="large-12 columns">
+        <h1>Pops's Magical Instrument Reader</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-8 medium-8 columns">
+        <h5>Here&rsquo;s your basic grid:</h5>
+        <!-- Grid Example -->
+
+        <div class="row">
+          <div class="large-12 columns">
+            <div class="primary callout">
+              <p><strong>This is a twelve column section in a row.</strong> Each of these includes a div.callout element so you can see where the columns are - it's not required at all for the grid.</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-6 medium-6 columns">
+            <div class="primary callout">
+              <p>Pressure</p>
+                  <div id="chart_div"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="large-12 columns">
+            <div class="primary callout">
+              <p>Pressure vs. Time</p>
+              <div id="pressure_time_chart"></div>
+              <p id="timeChartFailMessage" style="color: red; display: none">I couldn't load the data</p>
+            </div>
+          </div>
+        </div>
+
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
